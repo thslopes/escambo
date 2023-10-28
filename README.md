@@ -9,6 +9,12 @@ This is a POC and it's not ready for production.
 docker run -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=test -e MONGO_INITDB_ROOT_PASSWORD=123 -d mongo:latest
 ```
 
+## Load DB
+
+```sh
+go run cmd/mock/main.go
+```
+
 ## Running the app
 
 ```sh
@@ -19,5 +25,6 @@ go run cmd/main.go
 
 ```sh
 make mongo-docker
+make load-db
 make run
 ```

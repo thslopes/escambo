@@ -3,3 +3,6 @@ mongo-docker:
 
 run:
 	go run cmd/main.go
+
+load-db:
+	go run cmd/mock/main.go
