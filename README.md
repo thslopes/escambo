@@ -4,6 +4,42 @@ REST API with [Go-Chi](https://github.com/go-chi/chi) and [MongoDB Driver](https
 
 This is a POC and it's not ready for production.
 
+## Diff sample
+    
+```json
+{
+    "id": "2",
+    "user_id": 10,
+    "title": "article 2",
+    "slug": "article-23",
+    "versions": [
+        {
+            "article": {
+                "id": "2",
+                "user_id": 10,
+                "title": "article 2",
+                "slug": "article-21",
+                "versions": null
+            },
+            "changes": "  db.Article{\n  \tID:       \"2\",\n  \tUserID:   10,\n  \tTitle:    \"article 2\",\n- \tSlug:     \"article-21\",\n+ \tSlug:     \"article-22\",\n  \tVersions: nil,\n  }\n",
+            "user_id": 10
+        },
+        {
+            "article": {
+                "id": "2",
+                "user_id": 10,
+                "title": "article 2",
+                "slug": "article-22",
+                "versions": null
+            },
+            "changes": "  db.Article{\n  \tID:       \"2\",\n  \tUserID:   10,\n  \tTitle:    \"article 2\",\n- \tSlug:     \"article-22\",\n+ \tSlug:     \"article-23\",\n  \tVersions: nil,\n  }\n",
+            "user_id": 10
+        }
+    ],
+    "elapsed": 10
+}
+```  
+
 ## MongoDB Docker
 ```sh
 docker run -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=test -e MONGO_INITDB_ROOT_PASSWORD=123 -d mongo:latest
