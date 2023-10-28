@@ -70,7 +70,7 @@ func UpdateArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	article := data.Article
-	err := dbClient.UpdateArticle(article.ID, article)
+	err := dbClient.UpdateArticle(chi.URLParam(r, "articleID"), article)
 	if err != nil {
 		fmt.Println(err)
 		render.Render(w, r, ErrDB())

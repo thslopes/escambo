@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/middleware"
@@ -43,6 +44,7 @@ func Server() {
 		})
 	})
 
+	fmt.Println("Server running on http://localhost:3333")
 	err = http.ListenAndServe(":3333", r)
 	if err != nil {
 		panic(err)

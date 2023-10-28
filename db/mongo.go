@@ -16,9 +16,16 @@ type MongoDBClient struct {
 }
 
 func (c *MongoDBClient) Connect() error {
+	loggerOptions := options.
+		Logger().
+		SetComponentLevel(options.LogComponentCommand, options.LogLevelDebug)
 	// Use the SetServerAPIOptions() method to set the Stable API version to 1
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI(uri).SetServerAPIOptions(serverAPI)
+	opts := options.
+		Client().
+		ApplyURI(uri).
+		SetServerAPIOptions(serverAPI).
+		SetLoggerOptions(loggerOptions)
 	// Create a new client and connect to the server
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
@@ -90,9 +97,19 @@ func (c MongoDBClient) ListArticles() ([]*Article, error) {
 }
 
 func (c MongoDBClient) UpdateArticle(id string, article *Article) error {
+	old, err := c.GetArticleByID(id)
+	if err != nil {
+		return err
+	}
+	newVersion := old.NewVersion(*article)
+
+	update := bson.M{
+		"$set": newVersion,
+	}
+
 	collection := c.Client.Database("blog").Collection("articles")
 	filter := bson.D{{"_id", id}}
-	_, err := collection.UpdateOne(context.Background(), filter, article)
+	_, err = collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		return err
 	}
