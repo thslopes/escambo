@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -52,6 +53,7 @@ func (c MongoDBClient) GetArticleByID(id string) (*Article, error) {
 
 func (c MongoDBClient) SaveArticle(article *Article) error {
 	collection := c.Client.Database("blog").Collection("articles")
+	article.ID = uuid.New().String()
 	_, err := collection.InsertOne(context.Background(), article)
 	if err != nil {
 		return err
