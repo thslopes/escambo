@@ -1,5 +1,9 @@
 package db
 
+import (
+	"github.com/google/go-cmp/cmp"
+)
+
 type User struct {
 	ID   int64  `json:"id" bson:"_id"`
 	Name string `json:"name"`
@@ -30,14 +34,14 @@ type DBClient interface {
 }
 
 func (a Article) NewVersion(newVersion Article) Article {
-	newVersion.Versions = a.Versions
+	versions := a.Versions
 	newVersion.ID = a.ID
 	a.Versions = nil
-	a.ID = ""
-	newVersion.Versions = append(newVersion.Versions, ArticleVersion{
+	versions = append(versions, ArticleVersion{
 		Previous: a,
-		Changes:  "New version",
+		Changes:  cmp.Diff(a, newVersion),
 		UserID:   newVersion.UserID,
 	})
+	newVersion.Versions = versions
 	return newVersion
 }
